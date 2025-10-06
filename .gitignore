@@ -8,6 +8,4 @@ __pycache__/
 models/
 *.gguf
 *.bin
-*.wav
-*.mp4
 .venv/
