@@ -1,16 +1,12 @@
-from transformers import pipeline
-import soundfile as sf
+import librosa
+from transformers import AutoProcessor, AutoModelForSpeechSeq2Seq
 
-# Загружаем аудиофайл
-audio_file = "audio.wav"
-data, samplerate = sf.read(audio_file)
+audio, sr = librosa.load("ezyZip.wav", sr=16000)
+processor = AutoProcessor.from_pretrained("openai/whisper-small")
+model = AutoModelForSpeechSeq2Seq.from_pretrained("openai/whisper-small").to("cpu")
 
-# Загружаем модель
-asr_pipeline = pipeline(
-    "automatic-speech-recognition",
-    model="jonatasgrosman/wav2vec2-large-xlsr-53-russian"
-)
+inputs = processor(audio, sampling_rate=sr, return_tensors="pt").input_features
+generated_ids = model.generate(inputs)
+text = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
 
-# Распознаём речь
-result = asr_pipeline({"array": data, "sampling_rate": samplerate})
-print(f"Распознанный текст: {result['text']}")
+print(text)
