@@ -1,7 +1,7 @@
 import librosa
 from transformers import AutoProcessor, AutoModelForSpeechSeq2Seq
 
-audio, sr = librosa.load("ezyZip.wav", sr=16000)
+audio, sr = librosa.load("Recording.wav", sr=16000)
 processor = AutoProcessor.from_pretrained("openai/whisper-small")
 model = AutoModelForSpeechSeq2Seq.from_pretrained("openai/whisper-small").to("cpu")
 
